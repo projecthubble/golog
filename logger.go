@@ -185,7 +185,7 @@ func (l *Logger) DisableNewLine() *Logger {
 // Returns itself.
 func (l *Logger) SetLevel(levelName string) *Logger {
 	l.mu.Lock()
-	l.Level = ParseLevel(levelName)
+	l.Level = fromLevelName(levelName)
 	l.mu.Unlock()
 
 	return l
@@ -307,6 +307,22 @@ func (l *Logger) Debugf(format string, args ...interface{}) {
 	if l.Level >= DebugLevel {
 		msg := fmt.Sprintf(format, args...)
 		l.Debug(msg)
+	}
+}
+
+// Verbose will print when logger's Level is verbose.
+func (l *Logger) Verbose(v ...interface{}) {
+	l.Log(VerboseLevel, v...)
+}
+
+// Verbosef will print when logger's Level is verbose.
+func (l *Logger) Verbosef(format string, args ...interface{}) {
+	// On verbose mode don't even try to fmt.Sprintf if it's not required,
+	// this can be used to allow `Verbosef` to be called without even the `fmt.Sprintf`'s
+	// performance cost if the logger doesn't allow verbose logging.
+	if l.Level >= VerboseLevel {
+		msg := fmt.Sprintf(format, args...)
+		l.Verbose(msg)
 	}
 }
 

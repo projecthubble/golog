@@ -141,6 +141,16 @@ func Debugf(format string, args ...interface{}) {
 	Default.Debugf(format, args...)
 }
 
+// Verbose will print when logger's Level is verbose.
+func Verbose(v ...interface{}) {
+	Default.Verbose(v...)
+}
+
+// Verbosef will print when logger's Level is verbose.
+func Verbosef(format string, args ...interface{}) {
+	Default.Verbosef(format, args...)
+}
+
 // Install receives  an external logger
 // and automatically adapts its print functions.
 //

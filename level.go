@@ -25,6 +25,8 @@ const (
 	InfoLevel
 	// DebugLevel will print on any level, fatals, errors, warnings, infos and debug logs.
 	DebugLevel
+	// VerboseLevel will print on any level, fatals, errors, warnings, infos, debugs and verbose logs.
+	VerboseLevel
 )
 
 // Levels contains the levels and their
@@ -65,12 +67,14 @@ var Levels = map[Level]*LevelMetadata{
 		RawText:      "[DBUG]",
 		ColorfulText: pio.Yellow("[DBUG]"),
 	},
+	VerboseLevel: {
+		Name:         "verbose",
+		RawText:      "[VBOS]",
+		ColorfulText: pio.White("[VBOS]"),
+	},
 }
 
-// ParseLevel returns a `golog.Level` from a string level.
-// Note that all existing log levels (name, prefix and color) can be customized
-// and new one can be added by the package-level `golog.Levels` map variable.
-func ParseLevel(levelName string) Level {
+func fromLevelName(levelName string) Level {
 	for level, meta := range Levels {
 		if meta.Name == levelName {
 			return level
@@ -185,6 +189,8 @@ var (
 	//
 	// Deprecated Use `Levels[DebugLevel].SetText(string, string)` instead.
 	DebugText = Levels[DebugLevel].SetText
+
+	VerboseText = Levels[VerboseLevel].SetText
 
 	// GetTextForLevel is the function which
 	// has the "final" responsibility to generate the text (colorful or not)
